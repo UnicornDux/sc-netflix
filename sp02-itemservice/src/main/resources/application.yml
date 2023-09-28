@@ -1,0 +1,29 @@
+#server:
+#  port: 8001
+  
+spring:
+  application:
+    name: item-service
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka1:2001/eureka,http://eureka2:2002/eureka
+    registry-fetch-interval-seconds: 30    # 拉取注册信息间隔时间， 默认 30s        
+  instance:
+    lease-renewal-interval-in-seconds: 30  # 多久检测一次心跳，默认是 30s
+    
+      
+---    
+spring:
+  profiles: itemservice1
+
+server:
+  port: 8001
+  
+---
+spring:
+  profiles: itemservice2
+
+server:
+  port: 8002

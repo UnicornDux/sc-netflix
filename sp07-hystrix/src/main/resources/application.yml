@@ -1,0 +1,39 @@
+server:
+  port: 3001
+  
+spring:
+  application:
+    name: hystrix
+    
+    
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka1:2001/eureka,http://eureka2:2002/eureka
+
+
+ribbon:
+  MaxAutoRetriesNextServer: 2
+  MaxAutoRetries: 1
+  OkToRetryOnAllOperations: true
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 500   # 请求超时时间（超时降级）
+      circuitBreaker:
+        # 10秒请求量, 阈值默认为 20s 断路器开启的第一个条件
+        requestVolumnThreshold: 20   
+        # 请求失败百分比（默认50%）, 断路器开启的第二个条件 
+        errorThresholdPercentage: 50  
+        # 短路器打开多久之后允许再次访问（半开状态）默认5s, 仍然失败保持打开状态，成功则闭合断路器 
+        sleepWindowInMilliseconds: 5000       
+            
+management:
+  endpoints:
+    web:
+      exposure:
+        include: hystrix.stream

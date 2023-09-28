@@ -1,0 +1,55 @@
+server:
+  port: 3001
+  
+spring:
+  application:
+    name: feign
+    
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka1:2001/eureka,http://eureka2:2002/eureka
+
+ribbon:
+  ConnectTimeout: 1000
+  ReadTimeout: 1000
+  MaxAutoRetriesNextServer: 2
+  MaxAutoRetries: 1
+  
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 6000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: hystrix.stream
+      
+# springboot 默认的日志级别是info, feign 的日志级别是 debug 便不会输出
+logging:
+  level:
+    com.tedu.sp09: debug
+    
+# 配置 feignclient 客户端调用的日志级别
+feign:
+  hystrix:
+    enabled: true
+  client:
+    config:
+      item-service:
+        logger-level: BASIC
+        # 设置为默认的契约，还原 feign 原生注解，没有兼容 springmvc 注解，
+        # 一般不使用，主要用于兼容老项目
+        # contract: feign.Contract.Default 
+        # 连接超时时间设置，默认为 2s 
+        connectTimeout: 5000
+        # 处理超时设置 默认 5s
+        read-timeout: 30000
+        # 设置 Feign 拦截器
+        request-interceptors:
+          - com.tedu.sp09.interceptor.CustomFeignInterceptor

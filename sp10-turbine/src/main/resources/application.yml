@@ -1,0 +1,17 @@
+server:
+  port: 5001
+  
+spring:
+  application:
+    name: turbine
+    
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka1:2001/eureka,http://eureka2:2002/eureka
+
+turbine:
+  app-config: order-service, zuul    #将需要整合的部分逗号隔开全部配置在这里即可
+  cluster-name-expression: new String("default")  #固定格式写法
+ 
+#默认暴露的监控是http://localhost:5001/turbine.stream
